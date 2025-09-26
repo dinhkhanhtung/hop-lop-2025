@@ -25,7 +25,6 @@
       box-sizing: border-box;
       overflow: hidden;
     }
-    /* Dải màu ở đầu */
     .header {
       background: linear-gradient(135deg, #4CAF50, #2ecc71);
       color: white;
@@ -67,16 +66,50 @@
       cursor: pointer;
       font-weight: bold;
     }
-    button:hover {
+    button:disabled {
+      background: #a5d6a7;
+      cursor: not-allowed;
+    }
+    button:hover:enabled {
       background: #45a049;
     }
-    .success {
+    /* Popup Modal */
+    .popup {
       display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    .popup-content {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
       text-align: center;
-      margin-top: 15px;
-      font-size: 1rem;
+      max-width: 300px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      animation: scaleIn 0.3s ease-in-out;
+    }
+    .popup-content h3 {
+      margin: 0 0 10px;
       color: #27ae60;
+    }
+    .popup-content button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
       font-weight: bold;
+      cursor: pointer;
+    }
+    @keyframes scaleIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
   </style>
 </head>
@@ -137,30 +170,45 @@
         <label>Góp ý / Đề xuất</label>
         <textarea name="suggestion" rows="3" placeholder="VD: Muốn tổ chức ở Hà Nội, có karaoke..."></textarea>
 
-        <button type="submit">Gửi Thông Tin</button>
+        <button type="submit" id="submitBtn">Gửi Thông Tin</button>
       </form>
+    </div>
+  </div>
 
-      <div class="success" id="successMsg">✅ Cảm ơn bạn đã đăng ký! Hẹn gặp ở họp lớp 🎉</div>
+  <!-- Popup thông báo -->
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      <h3>✅ Đã Gửi Thành Công!</h3>
+      <p>Hẹn gặp bạn ở buổi họp lớp 🎉</p>
+      <button onclick="closePopup()">Đóng</button>
     </div>
   </div>
 
   <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbx6rHxgPTVimX2OaAB442uUHUK_9X2HN0fdhbjKmeogk89h0UJfnS4Gajqt3boo_DFY/exec';
     const form = document.getElementById('classForm');
-    const successMsg = document.getElementById('successMsg');
+    const popup = document.getElementById('popup');
+    const submitBtn = document.getElementById('submitBtn');
 
     form.addEventListener('submit', e => {
       e.preventDefault();
+      submitBtn.disabled = true; // chống spam
       fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-        .then(response => {
+        .then(() => {
           form.reset();
-          successMsg.style.display = 'block';
-          setTimeout(() => successMsg.style.display = 'none', 5000);
+          popup.style.display = 'flex';
+          setTimeout(() => submitBtn.disabled = false, 5000); // mở lại nút sau 5 giây
         })
-        .catch(error => alert('Có lỗi khi gửi dữ liệu!'));
+        .catch(() => {
+          alert('Có lỗi khi gửi dữ liệu!');
+          submitBtn.disabled = false;
+        });
     });
+
+    function closePopup() {
+      popup.style.display = 'none';
+    }
   </script>
 
 </body>
 </html>
-

@@ -21,19 +21,23 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       max-width: 500px;
       width: 100%;
-      padding: 20px;
+      padding: 0;
       box-sizing: border-box;
+      overflow: hidden;
     }
-    .banner {
-      width: 100%;
-      border-radius: 12px;
-      margin-bottom: 15px;
-    }
-    h2 {
+    /* Dải màu ở đầu */
+    .header {
+      background: linear-gradient(135deg, #4CAF50, #2ecc71);
+      color: white;
       text-align: center;
-      color: #2c3e50;
-      font-size: 1.4rem;
-      margin-bottom: 15px;
+      padding: 20px 10px;
+    }
+    .header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .content {
+      padding: 20px;
     }
     label {
       display: block;
@@ -79,63 +83,65 @@
 <body>
 
   <div class="container">
-    <img class="banner" src="https://i.imgur.com/d5uHkRL.jpeg" alt="Banner họp lớp">
-    <h2>Đăng Ký Họp Lớp</h2>
+    <div class="header">
+      <h2>Đăng Ký Họp Lớp</h2>
+    </div>
+    <div class="content">
+      <form id="classForm">
+        <label>Họ và tên *</label>
+        <input type="text" name="name" required>
 
-    <form id="classForm">
-      <label>Họ và tên *</label>
-      <input type="text" name="name" required>
+        <label>Số điện thoại *</label>
+        <input type="tel" name="phone" required>
 
-      <label>Số điện thoại *</label>
-      <input type="tel" name="phone" required>
+        <label>Facebook/Zalo</label>
+        <input type="url" name="social" placeholder="Dán link Facebook/Zalo">
 
-      <label>Facebook/Zalo</label>
-      <input type="url" name="social" placeholder="Dán link Facebook/Zalo">
+        <label>Hiện đang ở (tỉnh/thành)</label>
+        <select name="location" required>
+          <option value="">-- Chọn tỉnh/thành --</option>
+          <option>An Giang</option><option>Bà Rịa - Vũng Tàu</option>
+          <option>Bạc Liêu</option><option>Bắc Kạn</option><option>Bắc Giang</option>
+          <option>Bắc Ninh</option><option>Bến Tre</option><option>Bình Dương</option>
+          <option>Bình Định</option><option>Bình Phước</option><option>Bình Thuận</option>
+          <option>Cà Mau</option><option>Cao Bằng</option><option>Cần Thơ</option>
+          <option>Đà Nẵng</option><option>Đắk Lắk</option><option>Đắk Nông</option>
+          <option>Điện Biên</option><option>Đồng Nai</option><option>Đồng Tháp</option>
+          <option>Gia Lai</option><option>Hà Giang</option><option>Hà Nam</option>
+          <option>Hà Nội</option><option>Hà Tĩnh</option><option>Hải Dương</option>
+          <option>Hải Phòng</option><option>Hậu Giang</option><option>Hòa Bình</option>
+          <option>Hưng Yên</option><option>Khánh Hòa</option><option>Kiên Giang</option>
+          <option>Kon Tum</option><option>Lai Châu</option><option>Lạng Sơn</option>
+          <option>Lào Cai</option><option>Lâm Đồng</option><option>Long An</option>
+          <option>Nam Định</option><option>Nghệ An</option><option>Ninh Bình</option>
+          <option>Ninh Thuận</option><option>Phú Thọ</option><option>Phú Yên</option>
+          <option>Quảng Bình</option><option>Quảng Nam</option><option>Quảng Ngãi</option>
+          <option>Quảng Ninh</option><option>Quảng Trị</option><option>Sóc Trăng</option>
+          <option>Sơn La</option><option>Tây Ninh</option><option>Thái Bình</option>
+          <option>Thái Nguyên</option><option>Thanh Hóa</option><option>Thừa Thiên Huế</option>
+          <option>Tiền Giang</option><option>TP Hồ Chí Minh</option><option>Trà Vinh</option>
+          <option>Tuyên Quang</option><option>Vĩnh Long</option><option>Vĩnh Phúc</option>
+          <option>Yên Bái</option>
+        </select>
 
-      <label>Hiện đang ở (tỉnh/thành)</label>
-      <select name="location" required>
-        <option value="">-- Chọn tỉnh/thành --</option>
-        <option>An Giang</option><option>Bà Rịa - Vũng Tàu</option>
-        <option>Bạc Liêu</option><option>Bắc Kạn</option><option>Bắc Giang</option>
-        <option>Bắc Ninh</option><option>Bến Tre</option><option>Bình Dương</option>
-        <option>Bình Định</option><option>Bình Phước</option><option>Bình Thuận</option>
-        <option>Cà Mau</option><option>Cao Bằng</option><option>Cần Thơ</option>
-        <option>Đà Nẵng</option><option>Đắk Lắk</option><option>Đắk Nông</option>
-        <option>Điện Biên</option><option>Đồng Nai</option><option>Đồng Tháp</option>
-        <option>Gia Lai</option><option>Hà Giang</option><option>Hà Nam</option>
-        <option>Hà Nội</option><option>Hà Tĩnh</option><option>Hải Dương</option>
-        <option>Hải Phòng</option><option>Hậu Giang</option><option>Hòa Bình</option>
-        <option>Hưng Yên</option><option>Khánh Hòa</option><option>Kiên Giang</option>
-        <option>Kon Tum</option><option>Lai Châu</option><option>Lạng Sơn</option>
-        <option>Lào Cai</option><option>Lâm Đồng</option><option>Long An</option>
-        <option>Nam Định</option><option>Nghệ An</option><option>Ninh Bình</option>
-        <option>Ninh Thuận</option><option>Phú Thọ</option><option>Phú Yên</option>
-        <option>Quảng Bình</option><option>Quảng Nam</option><option>Quảng Ngãi</option>
-        <option>Quảng Ninh</option><option>Quảng Trị</option><option>Sóc Trăng</option>
-        <option>Sơn La</option><option>Tây Ninh</option><option>Thái Bình</option>
-        <option>Thái Nguyên</option><option>Thanh Hóa</option><option>Thừa Thiên Huế</option>
-        <option>Tiền Giang</option><option>TP Hồ Chí Minh</option><option>Trà Vinh</option>
-        <option>Tuyên Quang</option><option>Vĩnh Long</option><option>Vĩnh Phúc</option>
-        <option>Yên Bái</option>
-      </select>
+        <label>Bạn có tham gia họp lớp không?</label>
+        <select name="attend">
+          <option value="Có">Có</option>
+          <option value="Chưa chắc">Chưa chắc</option>
+          <option value="Không">Không</option>
+        </select>
 
-      <label>Bạn có tham gia họp lớp không?</label>
-      <select name="attend">
-        <option value="Có">Có</option>
-        <option value="Chưa chắc">Chưa chắc</option>
-        <option value="Không">Không</option>
-      </select>
+        <label>Số người đi cùng</label>
+        <input type="number" name="companions" min="0" value="0">
 
-      <label>Số người đi cùng</label>
-      <input type="number" name="companions" min="0" value="0">
+        <label>Góp ý / Đề xuất</label>
+        <textarea name="suggestion" rows="3" placeholder="VD: Muốn tổ chức ở Hà Nội, có karaoke..."></textarea>
 
-      <label>Góp ý / Đề xuất</label>
-      <textarea name="suggestion" rows="3" placeholder="VD: Muốn tổ chức ở Hà Nội, có karaoke..."></textarea>
+        <button type="submit">Gửi Thông Tin</button>
+      </form>
 
-      <button type="submit">Gửi Thông Tin</button>
-    </form>
-
-    <div class="success" id="successMsg">✅ Cảm ơn bạn đã đăng ký! Hẹn gặp ở họp lớp 🎉</div>
+      <div class="success" id="successMsg">✅ Cảm ơn bạn đã đăng ký! Hẹn gặp ở họp lớp 🎉</div>
+    </div>
   </div>
 
   <script>

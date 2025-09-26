@@ -2,54 +2,128 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Form Thông Tin Họp Lớp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng Ký Họp Lớp</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; }
-    h2 { text-align: center; }
-    label { display: block; margin-top: 10px; font-weight: bold; }
-    input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc; }
-    button { margin-top: 15px; padding: 10px; width: 100%; background: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer; }
-    button:hover { background: #45a049; }
-    .success { color: green; font-weight: bold; text-align: center; margin-top: 10px; }
+    body {
+      font-family: "Segoe UI", sans-serif;
+      margin: 0;
+      background: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 10px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 500px;
+      width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .banner {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      background: #4CAF50;
+      color: white;
+      font-size: 1.1rem;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    .success {
+      display: none;
+      text-align: center;
+      margin-top: 15px;
+      font-size: 1rem;
+      color: #27ae60;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
 
-  <h2>Đăng Ký Họp Lớp</h2>
+  <div class="container">
+    <img class="banner" src="https://i.imgur.com/d5uHkRL.jpeg" alt="Banner họp lớp">
+    <h2>Đăng Ký Họp Lớp</h2>
 
-  <form id="classForm">
-    <label>Họ và tên</label>
-    <input type="text" name="name" required>
+    <form id="classForm">
+      <label>Họ và tên *</label>
+      <input type="text" name="name" required>
 
-    <label>Số điện thoại</label>
-    <input type="text" name="phone" required>
+      <label>Số điện thoại *</label>
+      <input type="tel" name="phone" required>
 
-    <label>Link Facebook/Zalo</label>
-    <input type="url" name="social">
+      <label>Facebook/Zalo</label>
+      <input type="url" name="social" placeholder="Dán link Facebook/Zalo">
 
-    <label>Hiện đang ở (tỉnh/thành phố)</label>
-    <input type="text" name="location">
+      <label>Hiện đang ở (tỉnh/thành)</label>
+      <input type="text" name="location">
 
-    <label>Bạn có tham gia họp lớp không?</label>
-    <select name="attend">
-      <option value="Có">Có</option>
-      <option value="Chưa chắc">Chưa chắc</option>
-      <option value="Không">Không</option>
-    </select>
+      <label>Bạn có tham gia họp lớp không?</label>
+      <select name="attend">
+        <option value="Có">Có</option>
+        <option value="Chưa chắc">Chưa chắc</option>
+        <option value="Không">Không</option>
+      </select>
 
-    <label>Số người đi cùng</label>
-    <input type="number" name="companions" min="0" value="0">
+      <label>Số người đi cùng</label>
+      <input type="number" name="companions" min="0" value="0">
 
-    <label>Góp ý / Đề xuất</label>
-    <textarea name="suggestion" rows="3" placeholder="VD: Muốn tổ chức ở Đà Nẵng, muốn có karaoke..."></textarea>
+      <label>Góp ý / Đề xuất</label>
+      <textarea name="suggestion" rows="3" placeholder="VD: Muốn tổ chức ở Hà Nội, có karaoke..."></textarea>
 
-    <button type="submit">Gửi Thông Tin</button>
-  </form>
+      <button type="submit">Gửi Thông Tin</button>
+    </form>
 
-  <div class="success" id="successMsg" style="display:none;">✅ Cảm ơn bạn đã đăng ký, hẹn gặp ở họp lớp!</div>
+    <div class="success" id="successMsg">✅ Cảm ơn bạn đã đăng ký! Hẹn gặp ở họp lớp 🎉</div>
+  </div>
 
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbx6rHxgPTVimX2OaAB442uUHUK_9X2HN0fdhbjKmeogk89h0UJfnS4Gajqt3boo_DFY/exec';
+    const scriptURL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
     const form = document.getElementById('classForm');
     const successMsg = document.getElementById('successMsg');
 
@@ -59,5 +133,11 @@
         .then(response => {
           form.reset();
           successMsg.style.display = 'block';
+          setTimeout(() => successMsg.style.display = 'none', 5000);
         })
-        .catch
+        .catch(error => alert('Có lỗi khi gửi dữ liệu!'));
+    });
+  </script>
+
+</body>
+</html>

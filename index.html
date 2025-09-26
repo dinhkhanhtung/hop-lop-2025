@@ -70,8 +70,14 @@
       background: #a5d6a7;
       cursor: not-allowed;
     }
-    button:hover:enabled {
-      background: #45a049;
+    /* Loading text */
+    .loading {
+      display: none;
+      text-align: center;
+      margin-top: 10px;
+      color: #555;
+      font-style: italic;
+      font-size: 0.95rem;
     }
     /* Popup Modal */
     .popup {
@@ -171,6 +177,7 @@
         <textarea name="suggestion" rows="3" placeholder="VD: Muốn tổ chức ở Hà Nội, có karaoke..."></textarea>
 
         <button type="submit" id="submitBtn">Gửi Thông Tin</button>
+        <div class="loading" id="loadingText">⏳ Đang gửi, vui lòng chờ...</div>
       </form>
     </div>
   </div>
@@ -189,18 +196,23 @@
     const form = document.getElementById('classForm');
     const popup = document.getElementById('popup');
     const submitBtn = document.getElementById('submitBtn');
+    const loadingText = document.getElementById('loadingText');
 
     form.addEventListener('submit', e => {
       e.preventDefault();
-      submitBtn.disabled = true; // chống spam
+      submitBtn.disabled = true;
+      loadingText.style.display = "block";
+
       fetch(scriptURL, { method: 'POST', body: new FormData(form)})
         .then(() => {
           form.reset();
+          loadingText.style.display = "none";
           popup.style.display = 'flex';
-          setTimeout(() => submitBtn.disabled = false, 5000); // mở lại nút sau 5 giây
+          setTimeout(() => submitBtn.disabled = false, 5000);
         })
         .catch(() => {
           alert('Có lỗi khi gửi dữ liệu!');
+          loadingText.style.display = "none";
           submitBtn.disabled = false;
         });
     });
@@ -212,4 +224,3 @@
 
 </body>
 </html>
-

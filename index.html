@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Form Thông Tin Họp Lớp</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; }
+    h2 { text-align: center; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px; border: 1px solid #ccc; }
+    button { margin-top: 15px; padding: 10px; width: 100%; background: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer; }
+    button:hover { background: #45a049; }
+    .success { color: green; font-weight: bold; text-align: center; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+  <h2>Đăng Ký Họp Lớp</h2>
+
+  <form id="classForm">
+    <label>Họ và tên</label>
+    <input type="text" name="name" required>
+
+    <label>Số điện thoại</label>
+    <input type="text" name="phone" required>
+
+    <label>Link Facebook/Zalo</label>
+    <input type="url" name="social">
+
+    <label>Hiện đang ở (tỉnh/thành phố)</label>
+    <input type="text" name="location">
+
+    <label>Bạn có tham gia họp lớp không?</label>
+    <select name="attend">
+      <option value="Có">Có</option>
+      <option value="Chưa chắc">Chưa chắc</option>
+      <option value="Không">Không</option>
+    </select>
+
+    <label>Số người đi cùng</label>
+    <input type="number" name="companions" min="0" value="0">
+
+    <label>Góp ý / Đề xuất</label>
+    <textarea name="suggestion" rows="3" placeholder="VD: Muốn tổ chức ở Đà Nẵng, muốn có karaoke..."></textarea>
+
+    <button type="submit">Gửi Thông Tin</button>
+  </form>
+
+  <div class="success" id="successMsg" style="display:none;">✅ Cảm ơn bạn đã đăng ký, hẹn gặp ở họp lớp!</div>
+
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbx6rHxgPTVimX2OaAB442uUHUK_9X2HN0fdhbjKmeogk89h0UJfnS4Gajqt3boo_DFY/exec';
+    const form = document.getElementById('classForm');
+    const successMsg = document.getElementById('successMsg');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+        .then(response => {
+          form.reset();
+          successMsg.style.display = 'block';
+        })
+        .catch

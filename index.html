@@ -1,154 +1,297 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Đăng ký họp lớp</title>
   <style>
+    :root{
+      --green-1:#4CAF50;
+      --green-2:#2ecc71;
+      --card-bg:#ffffff;
+      --rounded:12px;
+    }
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to right, #4CAF50, #2E7D32);
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
       margin: 0;
-      padding: 0;
+      background: linear-gradient(90deg, #e8f5e9, #f1f8f0);
       display: flex;
       justify-content: center;
       align-items: flex-start;
       min-height: 100vh;
+      padding: 16px;
     }
     .container {
-      background: white;
-      max-width: 480px;
-      width: 90%;
-      margin: 20px;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      width: 100%;
+      max-width: 520px;
+      background: var(--card-bg);
+      border-radius: var(--rounded);
+      box-shadow: 0 6px 22px rgba(0,0,0,0.08);
+      overflow: hidden;
     }
-    h1 {
+
+    /* === Dải màu (header gradient) === */
+    .header {
+      padding: 20px 16px;
+      background: linear-gradient(135deg, var(--green-1), var(--green-2));
+      color: white;
       text-align: center;
-      color: #2E7D32;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 1.2rem;
+      letter-spacing: 0.2px;
+    }
+    .header p {
+      margin: 6px 0 0;
+      font-size: 0.9rem;
+      opacity: 0.95;
+    }
+
+    .content {
+      padding: 18px;
     }
     label {
       display: block;
       margin-top: 12px;
-      font-weight: bold;
+      font-weight: 600;
+      color: #333;
+      font-size: 0.95rem;
     }
-    input, select, textarea {
+    input[type="text"],
+    input[type="tel"],
+    input[type="number"],
+    select,
+    textarea {
       width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
+      padding: 10px 12px;
+      margin-top: 6px;
+      border-radius: 10px;
+      border: 1px solid #d4d4d4;
+      box-sizing: border-box;
+      font-size: 15px;
+      background: #fff;
     }
+    textarea { resize: vertical; min-height: 80px; }
+
+    .row {
+      display: flex;
+      gap: 12px;
+    }
+    .row > * { flex: 1; }
+
     button {
       margin-top: 16px;
       width: 100%;
       padding: 12px;
-      background-color: #4CAF50;
-      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      background: var(--green-1);
+      color: #fff;
       border: none;
-      font-size: 18px;
-      font-weight: bold;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
     }
     button:disabled {
-      background-color: #9CCC9C;
+      opacity: 0.6;
       cursor: not-allowed;
     }
-    .progress {
+
+    #loadingText {
       display: none;
       text-align: center;
       margin-top: 10px;
       font-style: italic;
-      color: #2E7D32;
+      color: #2e7d32;
+    }
+
+    /* Popup modal */
+    .popup {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .popup-inner {
+      background: #fff;
+      padding: 18px 20px;
+      border-radius: 12px;
+      text-align: center;
+      width: min(92%, 360px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    }
+    .popup-inner h3 { margin: 0 0 8px; color: #27ae60; }
+    .popup-inner p { margin: 0 0 12px; color: #333; }
+    .popup-inner button {
+      background: #27ae60;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    @media (max-width:420px){
+      .header h1{ font-size: 1.05rem; }
+      .content{ padding: 14px; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Đăng ký họp lớp</h1>
-    <form id="infoForm">
-      <label>Họ và tên *</label>
-      <input type="text" name="name" required>
 
-      <label>Số điện thoại *</label>
-      <input type="tel" name="phone" required>
+  <div class="container" role="main">
+    <!-- Header with gradient (dải màu) -->
+    <div class="header" aria-hidden="false">
+      <h1>🎓 Đăng ký họp lớp — 04/10/2025</h1>
+      <p>Khách mời: Cô Bằng, Thầy Cường, Thầy Bắc — Vui lòng điền thông tin</p>
+    </div>
 
-      <label>Facebook/Zalo link</label>
-      <input type="text" name="social" placeholder="https://...">
+    <div class="content">
+      <form id="classForm" autocomplete="on">
+        <label for="name">Họ và tên *</label>
+        <input id="name" name="name" type="text" required placeholder="Nguyễn Văn A">
 
-      <label>Tỉnh/Thành</label>
-      <select name="location">
-        <option value="">-- Chọn tỉnh/thành --</option>
-        <option>An Giang</option><option>Bà Rịa - Vũng Tàu</option><option>Bạc Liêu</option>
-        <option>Bắc Giang</option><option>Bắc Kạn</option><option>Bắc Ninh</option>
-        <option>Bến Tre</option><option>Bình Dương</option><option>Bình Định</option>
-        <option>Bình Phước</option><option>Bình Thuận</option><option>Cà Mau</option>
-        <option>Cao Bằng</option><option>Cần Thơ</option><option>Đà Nẵng</option>
-        <option>Đắk Lắk</option><option>Đắk Nông</option><option>Điện Biên</option>
-        <option>Đồng Nai</option><option>Đồng Tháp</option><option>Gia Lai</option>
-        <option>Hà Giang</option><option>Hà Nam</option><option>Hà Nội</option>
-        <option>Hà Tĩnh</option><option>Hải Dương</option><option>Hải Phòng</option>
-        <option>Hậu Giang</option><option>Hòa Bình</option><option>Hưng Yên</option>
-        <option>Khánh Hòa</option><option>Kiên Giang</option><option>Kon Tum</option>
-        <option>Lai Châu</option><option>Lạng Sơn</option><option>Lào Cai</option>
-        <option>Lâm Đồng</option><option>Long An</option><option>Nam Định</option>
-        <option>Nghệ An</option><option>Ninh Bình</option><option>Ninh Thuận</option>
-        <option>Phú Thọ</option><option>Phú Yên</option><option>Quảng Bình</option>
-        <option>Quảng Nam</option><option>Quảng Ngãi</option><option>Quảng Ninh</option>
-        <option>Quảng Trị</option><option>Sóc Trăng</option><option>Sơn La</option>
-        <option>Tây Ninh</option><option>Thái Bình</option><option>Thái Nguyên</option>
-        <option>Thanh Hóa</option><option>Thừa Thiên Huế</option><option>Tiền Giang</option>
-        <option>TP. Hồ Chí Minh</option><option>Trà Vinh</option><option>Tuyên Quang</option>
-        <option>Vĩnh Long</option><option>Vĩnh Phúc</option><option>Yên Bái</option>
-      </select>
+        <label for="phone">Số điện thoại *</label>
+        <!-- type text để giữ số 0 đầu; pattern giới hạn 9-11 chữ số -->
+        <input id="phone" name="phone" type="text" inputmode="numeric" required
+               pattern="0?[0-9]{8,10}" placeholder="Ví dụ: 0912345678">
 
-      <label>Bạn có tham gia?</label>
-      <select name="attend">
-        <option value="Có">Có</option>
-        <option value="Chưa chắc">Chưa chắc</option>
-        <option value="Không">Không</option>
-      </select>
+        <label for="social">Facebook / Zalo (link hoặc tên)</label>
+        <input id="social" name="social" type="text" placeholder="https://facebook.com/xxx hoặc Zalo">
 
-      <label>Số người đi cùng</label>
-      <input type="number" name="companions" min="0">
+        <label for="location">Tỉnh/Thành *</label>
+        <select id="location" name="location" required>
+          <option value="">-- Chọn tỉnh/thành --</option>
+          <option>An Giang</option><option>Bà Rịa - Vũng Tàu</option><option>Bạc Liêu</option>
+          <option>Bắc Kạn</option><option>Bắc Giang</option><option>Bắc Ninh</option>
+          <option>Bến Tre</option><option>Bình Dương</option><option>Bình Định</option>
+          <option>Bình Phước</option><option>Bình Thuận</option><option>Cà Mau</option>
+          <option>Cao Bằng</option><option>Cần Thơ</option><option>Đà Nẵng</option>
+          <option>Đắk Lắk</option><option>Đắk Nông</option><option>Điện Biên</option>
+          <option>Đồng Nai</option><option>Đồng Tháp</option><option>Gia Lai</option>
+          <option>Hà Giang</option><option>Hà Nam</option><option>Hà Nội</option>
+          <option>Hà Tĩnh</option><option>Hải Dương</option><option>Hải Phòng</option>
+          <option>Hậu Giang</option><option>Hòa Bình</option><option>Hưng Yên</option>
+          <option>Khánh Hòa</option><option>Kiên Giang</option><option>Kon Tum</option>
+          <option>Lai Châu</option><option>Lạng Sơn</option><option>Lào Cai</option>
+          <option>Lâm Đồng</option><option>Long An</option><option>Nam Định</option>
+          <option>Nghệ An</option><option>Ninh Bình</option><option>Ninh Thuận</option>
+          <option>Phú Thọ</option><option>Phú Yên</option><option>Quảng Bình</option>
+          <option>Quảng Nam</option><option>Quảng Ngãi</option><option>Quảng Ninh</option>
+          <option>Quảng Trị</option><option>Sóc Trăng</option><option>Sơn La</option>
+          <option>Tây Ninh</option><option>Thái Bình</option><option>Thái Nguyên</option>
+          <option>Thanh Hóa</option><option>Thừa Thiên Huế</option><option>Tiền Giang</option>
+          <option>TP Hồ Chí Minh</option><option>Trà Vinh</option><option>Tuyên Quang</option>
+          <option>Vĩnh Long</option><option>Vĩnh Phúc</option><option>Yên Bái</option>
+        </select>
 
-      <label>Góp ý/Đề xuất</label>
-      <textarea name="suggestion" rows="3"></textarea>
+        <label for="attend">Bạn có tham gia?</label>
+        <select id="attend" name="attend">
+          <option value="Có">Có</option>
+          <option value="Chưa chắc">Chưa chắc</option>
+          <option value="Không">Không</option>
+        </select>
 
-      <button type="submit">Gửi thông tin</button>
-      <div class="progress" id="progress">⏳ Đang gửi thông tin...</div>
-    </form>
+        <div class="row">
+          <div>
+            <label for="companions">Số người đi cùng</label>
+            <input id="companions" name="companions" type="number" min="0" value="0">
+          </div>
+          <div>
+            <label for="empty">&nbsp;</label>
+            <input style="visibility:hidden" aria-hidden="true">
+          </div>
+        </div>
+
+        <label for="suggestion">Góp ý / Đề xuất</label>
+        <textarea id="suggestion" name="suggestion" rows="3" placeholder="VD: muốn tổ chức ở Hà Nội, ưu tiên ăn uống..."></textarea>
+
+        <button type="submit" id="submitBtn">Gửi thông tin</button>
+        <div id="loadingText">⏳ Đang gửi, vui lòng chờ...</div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Popup -->
+  <div class="popup" id="popup" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="popup-inner" role="document">
+      <h3>✅ Đã gửi thành công!</h3>
+      <p>Cảm ơn bạn — chúng mình sẽ gọi xác nhận để chốt danh sách.</p>
+      <button id="closePopupBtn">Đóng</button>
+    </div>
   </div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbx6rHxgPTVimX2OaAB442uUHUK_9X2HN0fdhbjKmeogk89h0UJfnS4Gajqt3boo_DFY/exec"; // dán URL Web App vào đây
-    const form = document.getElementById("infoForm");
-    const progress = document.getElementById("progress");
+    // === Thay bằng link Web App /exec của bạn ===
+    const scriptURL = "https://script.google.com/macros/s/AKfycbx6rHxgPTVimX2OaAB442uUHUK_9X2HN0fdhbjKmeogk89h0UJfnS4Gajqt3boo_DFY/exec";
 
-    form.addEventListener("submit", async (e) => {
+    const form = document.getElementById('classForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const loadingText = document.getElementById('loadingText');
+    const popup = document.getElementById('popup');
+    const closePopupBtn = document.getElementById('closePopupBtn');
+
+    // Hiển thị popup khi URL có ?success=1 (chống F5 gửi lại)
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('success') === '1') {
+        showPopup();
+        // Xóa param khỏi URL để F5 không hiện lại popup
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    });
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      progress.style.display = "block";
+
+      // simple client-side validation for phone pattern
+      const phoneInput = document.getElementById('phone');
+      const phoneOk = phoneInput.checkValidity();
+      if (!phoneOk) {
+        alert('Vui lòng nhập số điện thoại hợp lệ (ví dụ: 0912345678).');
+        phoneInput.focus();
+        return;
+      }
+
+      submitBtn.disabled = true;
+      loadingText.style.display = 'block';
 
       try {
-        const response = await fetch(scriptURL, {
-          method: "POST",
-          body: new FormData(form),
-        });
+        const resp = await fetch(scriptURL, { method: 'POST', body: new FormData(form) });
 
-        if (response.ok) {
-          alert("🎉 Gửi thành công! Cảm ơn bạn đã đăng ký.");
-          form.reset();
+        // nếu server trả ok → redirect để tránh re-submit khi F5
+        if (resp.ok) {
+          // redirect với param success để hiện popup 1 lần
+          window.location.href = window.location.pathname + '?success=1';
         } else {
-          alert("⚠️ Có lỗi khi gửi dữ liệu!");
+          // đọc body nếu có để debug/hiện lỗi
+          const text = await resp.text();
+          alert('Có lỗi khi gửi dữ liệu. Vui lòng thử lại.\n' + (text || ''));
+          submitBtn.disabled = false;
+          loadingText.style.display = 'none';
         }
-      } catch (error) {
-        alert("⚠️ Không thể kết nối. Vui lòng thử lại.");
-      } finally {
-        progress.style.display = "none";
+      } catch (err) {
+        console.error('Fetch error:', err);
+        alert('Không thể kết nối tới server. Vui lòng kiểm tra lại link Apps Script và quyền deploy.');
+        submitBtn.disabled = false;
+        loadingText.style.display = 'none';
       }
+    });
+
+    function showPopup() {
+      popup.style.display = 'flex';
+      popup.setAttribute('aria-hidden', 'false');
+    }
+    function hidePopup() {
+      popup.style.display = 'none';
+      popup.setAttribute('aria-hidden', 'true');
+    }
+    closePopupBtn.addEventListener('click', () => {
+      hidePopup();
     });
   </script>
 </body>
